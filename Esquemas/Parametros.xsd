@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 (http://www.altova.com) by MESMERiZE (MiZE) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Parametros">
+		<xs:annotation>
+			<xs:documentation>Parámetros para uso del método de generación de código de usuario del web service de factuxion.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="Version" use="required" fixed="1.0">
+				<xs:annotation>
+					<xs:documentation>Atributo que contiene la versión del archivo de parámetros del proceso.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CodigoUsuarioProveedor" use="required">
+				<xs:annotation>
+					<xs:documentation>Este parámetro  es proporcionado por el proveedor autorizado y debería contener las siguientes características:
+ Debe ser un código por cada usuario que vaya a hacer uso del servicio de timbrado por web service.
+ Mediante este código debe poderse identificar plenamente al usuario que hace uso del web service.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="CodigoUsuario" use="required">
+				<xs:annotation>
+					<xs:documentation>Atributo que contiene el código que identifica al usuario del web service, este código es proporcionado por Facturaxion al proveedor autorizado mediante el uso del web service de administración.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+						<xs:maxLength value="40"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="IdSucursal" use="required">
+				<xs:annotation>
+					<xs:documentation>Identificador de la sucursal, este dato le es proporcionado al usuario del web service en la aplicación web y hace referencia a la sucursal que esta facturando.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:long">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="TextoXml">
+				<xs:annotation>
+					<xs:documentation>Este parámetro es el archivo XML como una única cadena de texto, incluyendo todos los nodos y atributos.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

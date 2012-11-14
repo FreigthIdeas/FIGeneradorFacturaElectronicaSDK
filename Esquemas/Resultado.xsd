@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 (http://www.altova.com) by MESMERiZE (MiZE) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Informacion">
+		<xs:annotation>
+			<xs:documentation>Nodo que agrupa toda la información que se ha generado en el proceso de timbrado.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Documento" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nodo que agrupa toda la información del documento que ha sido enviado a timbrar.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="Serie">
+							<xs:annotation>
+								<xs:documentation>Atributo opcional para precisar la serie para control interno del contribuyente.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="Folio">
+							<xs:annotation>
+								<xs:documentation>Atributo opcional para control interno del contribuyente.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="RFCEmisor">
+							<xs:annotation>
+								<xs:documentation>Atributo opcional usado para almacenar el RFC del emisor del comprobante.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="RFCReceptor">
+							<xs:annotation>
+								<xs:documentation>Atributo opcional usado para almacenar el RFC del receptor del comprobante</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="Fecha">
+							<xs:annotation>
+								<xs:documentation>Atributo opcional usado para almacenar la fecha del comprobante.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Timbre" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="version" use="required" fixed="1.0">
+							<xs:annotation>
+								<xs:documentation>Atributo requerido para la expresión de la versión del estándar del Timbre Fiscal Digital</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="UUID" use="required" id="UUID">
+							<xs:annotation>
+								<xs:documentation>Atributo requerido para expresar los 36 caracteres del UUID de la transacción de timbrado</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:length value="36"/>
+									<xs:pattern value="[a-f0-9A-F]{8}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="FechaTimbrado" use="required">
+							<xs:annotation>
+								<xs:documentation>Atributo requerido para expresar el número de serie del certificado del SAT usado para el Timbre </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:dateTime">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="selloCFD" use="required">
+							<xs:annotation>
+								<xs:documentation>Atributo requerido para contener el sello digital del comprobante fiscal, que será timbrado. El sello deberá ser expresado cómo una cadena de texto en formato Base 64.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="noCertificadoSAT" use="required">
+							<xs:annotation>
+								<xs:documentation>Atributo requerido para expresar el número de serie del certificado del SAT usado para el Timbre</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:length value="20"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="selloSAT" use="required">
+							<xs:annotation>
+								<xs:documentation>Atributo requerido para contener el sello digital del Timbre Fiscal Digital, al que hacen referencia las reglas de resolución miscelánea aplicable. El sello deberá ser expresado cómo una cadena de texto en formato
+Base 64.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Errores" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nodo que agrupa todo los errores que se generaron durante el proceso de validación o timbrado.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="Error">
+								<xs:complexType>
+									<xs:attribute name="Id" use="required">
+										<xs:annotation>
+											<xs:documentation>Atributo que indica el numero de error que se genero durante el proceso de validación o timbrado.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:int">
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="Descripcion" use="required">
+										<xs:annotation>
+											<xs:documentation>Atributo usado para mostrar el detalle del error generado.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Archivo">
+				<xs:annotation>
+					<xs:documentation>Atributo usado para expresar el nombre del archivo contenido en el comprimido. Este atributo solo es usado cuando se envía un lote de archivos para timbrar.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="XML">
+				<xs:annotation>
+					<xs:documentation>Atributo usado para contener la informacion de CFDI como una cadena de texto.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Timbrado">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Resultado">
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element ref="Informacion">
+								<xs:annotation>
+									<xs:documentation>Nodo que agrupa toda la información que se ha generado en el proceso de timbrado de un archivo.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

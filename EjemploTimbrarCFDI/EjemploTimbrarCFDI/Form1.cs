@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FIGeneradorFacturaElectronica;
+using FIGeneradorFacturaElectronica.ComplementoConcepto;
 using FIGeneradorFacturaElectronica.Complementos;
 
 
@@ -110,6 +111,9 @@ namespace EjemploTimbrarCFDI
              Concepto2.valorUnitario=new FIGeneradorFacturaElectronica.Importe(100);
              Concepto2.importe = new FIGeneradorFacturaElectronica.Importe(100);
              Concepto2.unidad = "No aplica";
+
+            //agregando complemento concepto al comprobante por order y cuenta de terceros
+            AgregarComplementoterceros(Concepto2);
 
             //Agregando los conceptos al comprobante
             Comprobante.Conceptos.Add(Concepto1);
@@ -228,6 +232,31 @@ namespace EjemploTimbrarCFDI
             if(!Comprobante.Complementos.AgregarComplemento(ImpLoc,out Errores))
                 lstErrores.DataSource = Errores;
             return XMLImpuestosLoc;
+        }
+
+        private void AgregarComplementoterceros(Concepto cConcepto)
+        {
+            FIGeneradorFacturaElectronica.ComplementoConcepto.terceros Tercero=new terceros();
+            Tercero.rfc = "FID080111867";
+            Tercero.nombre = "FREIGHTIDEAS S.A DE C.V.";
+            Tercero.InformacionFiscalTercero.calle = "ARIZONA";
+            Tercero.InformacionFiscalTercero.noExterior = "108";
+            //Comprobante.Receptor.Domicilio.noInterior = "1";
+            Tercero.InformacionFiscalTercero.colonia = "COL. NAPOLES";
+            //Comprobante.Receptor.Domicilio.localidad = "TEOLOYUCAN";
+            Tercero.InformacionFiscalTercero.municipio = "Benito Juarez";
+            Tercero.InformacionFiscalTercero.estado = "Distrito Federal";
+            Tercero.InformacionFiscalTercero.pais = "MEXICO";
+            Tercero.InformacionFiscalTercero.codigoPostal = "03810";
+
+            Traslado TerceroTraslado=new Traslado();
+            TerceroTraslado.impuesto = Traslado.TipoImpuesto.IVA;
+            TerceroTraslado.tasa=new Importe(15);
+            TerceroTraslado.importe=new Importe(15);
+
+            Tercero.ImpuestosTerceros.Traslados.Add(TerceroTraslado);
+
+            cConcepto.ComplementoConcepto = Tercero;
         }
     }
 }
