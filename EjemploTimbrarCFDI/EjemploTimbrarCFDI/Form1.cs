@@ -26,7 +26,7 @@ namespace EjemploTimbrarCFDI
         private String ArchivoCertificado = "aaqm610917qja.cer";
         private String ContraseñaCertificado = "12345678a";
         private String NoCertificado = "20001000000100001695";
-        private String PosicionCertificado = "E:\\Certificados\\";
+        private String PosicionCertificado = "d:\\Certificados\\";
         private string RFC = "AAQM610917QJA";
 
         //datos Timbre
@@ -104,6 +104,23 @@ namespace EjemploTimbrarCFDI
             //nuevo en los conceptos
             Concepto1.unidad = "Pieza";
 
+            //ejemplo para agregar una cuenta predial al concepto
+            //Concepto1.CuentaPredial="rur85859";
+
+            //ejemplo para agregarle informacion aduanera en el concepto
+            FIGeneradorFacturaElectronica.t_InformacionAduanera informacionAduanera=new t_InformacionAduanera();
+            informacionAduanera.numero = "120";
+            informacionAduanera.fecha = System.DateTime.Now;
+            informacionAduanera.numero = "234";
+            informacionAduanera.aduana = "AICM";
+
+            Parte parte=new Parte();
+            parte.InformacionAduanera.Add(informacionAduanera);
+            parte.cantidad = 1;
+            parte.descripcion = "Prueba";
+
+            Concepto1.Parte.Add(parte);
+            
             //crear otro concepto
              FIGeneradorFacturaElectronica.Concepto Concepto2 = new FIGeneradorFacturaElectronica.Concepto();
              Concepto2.cantidad=1;
