@@ -22,17 +22,17 @@ namespace EjemploTimbrarCFDI
 
 
         //Datos Certificado
-        private String ArchivoKey = "aaqm610917qja_1011180955s.key";
-        private String ArchivoCertificado = "aaqm610917qja.cer";
+        private String ArchivoKey = "aaa010101aaa__csd_01.key";
+        private String ArchivoCertificado = "aaa010101aaa__csd_01.cer";
         private String ContraseñaCertificado = "12345678a";
-        private String NoCertificado = "20001000000100001695";
-        private String PosicionCertificado = "d:\\Certificados\\";
-        private string RFC = "AAQM610917QJA";
+        private String NoCertificado = "20001000000100005867";
+        private String PosicionCertificado = "E:\\Certificados\\";
+        private string RFC = "aaa010101aaa";
 
         //datos Timbre
         private String CodigoUsuarioProveedor = "N#@Mo!)#oh>)BYOdX=q_ZUCsLxqpv?";
         private String CodigoUsuario = "1763AAB0593430490B3B3EE5457A9A2580F9D7DE";
-        private int IdSucursal = 33928;
+        private int IdSucursal = 151048;
 
         private void btnTimbrar_Click(object sender, EventArgs e)
         {
