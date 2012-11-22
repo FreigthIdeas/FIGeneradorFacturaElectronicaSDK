@@ -128,13 +128,25 @@ namespace EjemploTimbrarCFDI
              Concepto2.valorUnitario=new FIGeneradorFacturaElectronica.Importe(100);
              Concepto2.importe = new FIGeneradorFacturaElectronica.Importe(100);
              Concepto2.unidad = "No aplica";
-
+             
             //agregando complemento concepto al comprobante por order y cuenta de terceros
             AgregarComplementoterceros(Concepto2);
+
+            //crear otro concepto
+            FIGeneradorFacturaElectronica.Concepto Concepto3 = new FIGeneradorFacturaElectronica.Concepto();
+            Concepto3.cantidad = 1;
+            Concepto3.descripcion = "Factura";
+            Concepto3.valorUnitario = new FIGeneradorFacturaElectronica.Importe(1.50);
+            Concepto3.importe = new FIGeneradorFacturaElectronica.Importe(1.50);
+            Concepto3.unidad = "Pieza";
+
+            //Invocamos a la muestra de como crear complemento iedu
+            AgregarComplementoiedu(Concepto3);
 
             //Agregando los conceptos al comprobante
             Comprobante.Conceptos.Add(Concepto1);
             Comprobante.Conceptos.Add(Concepto2);
+            Comprobante.Conceptos.Add(Concepto3);
             
             //totales de impuestos
             Comprobante.Impuestos.totalImpuestosRetenidos = new FIGeneradorFacturaElectronica.Importe(2317.44);
@@ -159,7 +171,12 @@ namespace EjemploTimbrarCFDI
             Comprobante.Impuestos.Retenciones.Add(Retencion);
 
             //invocamos a la muestra de como crear complemento de impuestos locales
-            AgregarComplementoImpuestosLocales(Comprobante);
+            //AgregarComplementoImpuestosLocales(Comprobante);
+
+            //Invocamos a la muestra de como crear complemento de donatarios
+            //AgregarComplementoDonatarios(Comprobante);
+
+            
 
             //nuevo objeto para la generacion del CFDI especificando el tipo
             FIGeneradorFacturaElectronica.Generador GenCFDI = new FIGeneradorFacturaElectronica.Generador(FIGeneradorFacturaElectronica.Generador.TipoFacturacion.CFDI);
@@ -219,36 +236,39 @@ namespace EjemploTimbrarCFDI
                 //Conexion para timbrado
                 FIGeneradorFacturaElectronica.Timbre Timbrado = new FIGeneradorFacturaElectronica.Timbre();
                 //se envia a carcelar el timbre antes generado
-                lblCancelar.Text = Timbrado.CancelarTimbre(CodigoUsuarioProveedor, CodigoUsuario, RFC,txtUUID.Text.Trim());
-
+                String Resultado = String.Empty;
+                if (Timbrado.CancelarTimbre(CodigoUsuarioProveedor, CodigoUsuario, RFC, txtUUID.Text.Trim(), out Resultado))
+                    lblCancelar.Text = Resultado;
+                else
+                {
+                    
+                }
             }
         }
 
-        private String AgregarComplementoImpuestosLocales(ComprobanteCFDI32 Comprobante)
+        private void AgregarComplementoImpuestosLocales(ComprobanteCFDI32 Comprobante)
         {
             //Codigo de ejemplo para crear complemento de impuestos locales
 
             FIGeneradorFacturaElectronica.Complementos.ImpuestosLocales ImpLoc=new FIGeneradorFacturaElectronica.Complementos.ImpuestosLocales();
 
             //Crear valores de impuesto local
-            FIGeneradorFacturaElectronica.Complementos.TrasladosLocales TrasLoc = new TrasladosLocales();
+            FIGeneradorFacturaElectronica.Complementos.TrasladosLocales TrasLoc = new FIGeneradorFacturaElectronica.Complementos.TrasladosLocales();
             TrasLoc.ImpLocTrasladado = "ISH";
-            TrasLoc.TasadeTraslado = new ImporteImpuestosLocales(10);
-            TrasLoc.Importe = new ImporteImpuestosLocales(120.25);
+            TrasLoc.TasadeTraslado = new FIGeneradorFacturaElectronica.Complementos.ImporteImpuestosLocales(10);
+            TrasLoc.Importe = new FIGeneradorFacturaElectronica.Complementos.ImporteImpuestosLocales(120.25);
 
-
+             
             //Agregar el traslado
             ImpLoc.TrasladosLocales.Add(TrasLoc); 
 
             ImpLoc.TotaldeTraslados = new FIGeneradorFacturaElectronica.Complementos.ImporteImpuestosLocales(120.25);
             ImpLoc.TotaldeRetenciones=new FIGeneradorFacturaElectronica.Complementos.ImporteImpuestosLocales(0);
 
-            String XMLImpuestosLoc = String.Empty;
             String Errores = String.Empty;
             
             if(!Comprobante.Complementos.AgregarComplemento(ImpLoc,out Errores))
                 lstErrores.DataSource = Errores;
-            return XMLImpuestosLoc;
         }
 
         private void AgregarComplementoterceros(Concepto cConcepto)
@@ -274,6 +294,36 @@ namespace EjemploTimbrarCFDI
             Tercero.ImpuestosTerceros.Traslados.Add(TerceroTraslado);
 
             cConcepto.ComplementoConcepto = Tercero;
+        }
+
+        private void AgregarComplementoDonatarios(ComprobanteCFDI32 Comprobante)
+        {
+            FIGeneradorFacturaElectronica.Complementos.donat Donatarios = new FIGeneradorFacturaElectronica.Complementos.donat();
+
+            Donatarios.fechaAutorizacion = System.DateTime.Now;
+            Donatarios.leyenda = "Donatarios leyenda";
+            Donatarios.noAutorizacion = "12545";
+
+            String XMLDonatarios = String.Empty;
+            String Errores = String.Empty;
+
+            if (!Comprobante.Complementos.AgregarComplemento(Donatarios, out Errores))
+                lstErrores.DataSource = Errores;
+        }
+
+        private void AgregarComplementoiedu(Concepto cConcepto)
+        {
+            FIGeneradorFacturaElectronica.ComplementoConcepto.iedu IEDU = new iedu();
+
+            IEDU.CURP = "COTM811112HDFSMR02";
+            IEDU.rfcPago = "FID081111867";
+            IEDU.nivelEducativo = iedu.NivelesEducativos.ProfesionalTecnico;
+            IEDU.nombreAlumno = "Juan Perez";
+            IEDU.autRVOE = "I.P.N.";
+
+            List<String> Errores = null;
+
+            cConcepto.ComplementoConcepto = IEDU;
         }
     }
 }
