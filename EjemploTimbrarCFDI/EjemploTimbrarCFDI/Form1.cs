@@ -25,8 +25,8 @@ namespace EjemploTimbrarCFDI
         private String ArchivoKey = "aaa010101aaa__csd_01.key";
         private String ArchivoCertificado = "aaa010101aaa__csd_01.cer";
         private String ContraseñaCertificado = "12345678a";
-        private String NoCertificado = "20001000000100005867";
-        private String PosicionCertificado = "E:\\Certificados\\";
+        
+        private String PosicionCertificado = "D:\\Certificados\\";
         private string RFC = "aaa010101aaa";
 
         //datos Timbre
@@ -47,7 +47,7 @@ namespace EjemploTimbrarCFDI
             Comprobante.tipoDeComprobante = "ingreso";
             Comprobante.Moneda = "MXN";
             //Comprobante.TipoCambio = "1"; //utilizar en caso de moneda extranjera
-            Comprobante.noCertificado = NoCertificado;
+            
 
             // Campos nuevos en comprobante
             Comprobante.LugarExpedicion = "VERACRUZ";
@@ -119,7 +119,7 @@ namespace EjemploTimbrarCFDI
             parte.cantidad = 1;
             parte.descripcion = "Prueba";
 
-            Concepto1.Parte.Add(parte);
+            //Concepto1.Parte.Add(parte);
             
             //crear otro concepto
              FIGeneradorFacturaElectronica.Concepto Concepto2 = new FIGeneradorFacturaElectronica.Concepto();
@@ -130,7 +130,7 @@ namespace EjemploTimbrarCFDI
              Concepto2.unidad = "No aplica";
              
             //agregando complemento concepto al comprobante por order y cuenta de terceros
-            AgregarComplementoterceros(Concepto2);
+            //AgregarComplementoterceros(Concepto2);
 
             //crear otro concepto
             FIGeneradorFacturaElectronica.Concepto Concepto3 = new FIGeneradorFacturaElectronica.Concepto();
@@ -141,7 +141,7 @@ namespace EjemploTimbrarCFDI
             Concepto3.unidad = "Pieza";
 
             //Invocamos a la muestra de como crear complemento iedu
-            AgregarComplementoiedu(Concepto3);
+            //AgregarComplementoiedu(Concepto3);
 
             //Agregando los conceptos al comprobante
             Comprobante.Conceptos.Add(Concepto1);
@@ -180,14 +180,15 @@ namespace EjemploTimbrarCFDI
 
             //nuevo objeto para la generacion del CFDI especificando el tipo
             FIGeneradorFacturaElectronica.Generador GenCFDI = new FIGeneradorFacturaElectronica.Generador(FIGeneradorFacturaElectronica.Generador.TipoFacturacion.CFDI);
+            
             //Generar el nuevo comprobante y obtener el numero de errores
-            List<String> Errores = GenCFDI.NuevoComprobante(Comprobante);
+            List<cErrores> Errores = GenCFDI.NuevoComprobante(Comprobante);
 
             //si el listado de errores es mayor a 1 quiere decir que existen un error y no puede generarse el preCFDI
             if(Errores.Count==0)
             {
                 String PreCFDI=String.Empty;
-                String ErroresPreCFDI = String.Empty;
+                cErrores ErroresPreCFDI =null;
                 //generar el preCFDI si es correcto se regresa true y puede ahora timbrase
                 if (GenCFDI.GenerarPreCFDI(PosicionCertificado + ArchivoKey, PosicionCertificado + ArchivoCertificado, ContraseñaCertificado,out PreCFDI,out ErroresPreCFDI))
                 {
@@ -216,14 +217,14 @@ namespace EjemploTimbrarCFDI
                 else
                 {
                     lstErrores.Items.Clear();
-                    lstErrores.Items.Add(ErroresPreCFDI);
+                    lstErrores.Items.Add(ErroresPreCFDI.Descripcion);
                 }
             }
             else
             {
                 lstErrores.Items.Clear();
                 lstErrores.DataSource = Errores;
-                
+                lstErrores.DisplayMember = "Descripcion";
             }
 
 
@@ -265,7 +266,7 @@ namespace EjemploTimbrarCFDI
             ImpLoc.TotaldeTraslados = new FIGeneradorFacturaElectronica.Complementos.ImporteImpuestosLocales(120.25);
             ImpLoc.TotaldeRetenciones=new FIGeneradorFacturaElectronica.Complementos.ImporteImpuestosLocales(0);
 
-            String Errores = String.Empty;
+            cErrores Errores = null;
             
             if(!Comprobante.Complementos.AgregarComplemento(ImpLoc,out Errores))
                 lstErrores.DataSource = Errores;
@@ -305,7 +306,7 @@ namespace EjemploTimbrarCFDI
             Donatarios.noAutorizacion = "12545";
 
             String XMLDonatarios = String.Empty;
-            String Errores = String.Empty;
+            cErrores Errores = null;
 
             if (!Comprobante.Complementos.AgregarComplemento(Donatarios, out Errores))
                 lstErrores.DataSource = Errores;
@@ -320,9 +321,6 @@ namespace EjemploTimbrarCFDI
             IEDU.nivelEducativo = iedu.NivelesEducativos.ProfesionalTecnico;
             IEDU.nombreAlumno = "Juan Perez";
             IEDU.autRVOE = "I.P.N.";
-
-            List<String> Errores = null;
-
             cConcepto.ComplementoConcepto = IEDU;
         }
     }
