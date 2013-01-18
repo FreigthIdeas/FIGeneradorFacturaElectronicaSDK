@@ -119,7 +119,7 @@ namespace EjemploTimbrarCFDI
             parte.cantidad = 1;
             parte.descripcion = "Prueba";
 
-            //Concepto1.Parte.Add(parte);
+            Concepto1.Parte.Add(parte);
             
             //crear otro concepto
              FIGeneradorFacturaElectronica.Concepto Concepto2 = new FIGeneradorFacturaElectronica.Concepto();
@@ -130,7 +130,7 @@ namespace EjemploTimbrarCFDI
              Concepto2.unidad = "No aplica";
              
             //agregando complemento concepto al comprobante por order y cuenta de terceros
-            //AgregarComplementoterceros(Concepto2);
+            AgregarComplementoterceros(Concepto2);
 
             //crear otro concepto
             FIGeneradorFacturaElectronica.Concepto Concepto3 = new FIGeneradorFacturaElectronica.Concepto();
